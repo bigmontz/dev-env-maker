@@ -1,7 +1,22 @@
 #!/bin/sh
 
+RED='\033[0;31m'
+NC='\033[0m' # No Color
+
 TICKET=$(git config --local redmine.ticket)
 if [ ! -z "$TICKET" ]; 
 then
     echo $(cat "$1") "#$TICKET" > "$1"
+fi
+VALIDATE_COMMIT_MSG=$(git config redmine.validatecommitmsg)
+if [ VALIDATE_COMMIT_MSG ]; 
+then
+    COMMIT_MSG_HAS_TICKET=$(cat "$1")
+    if  grep --quiet  -P " (#\d+[\ \.\,]|#\d+$)" "$1"  ; 
+    then 
+        echo ""
+    else 
+        echo -e "${RED}Commit message has to have a ticket number${NC}"
+        exit 1
+    fi
 fi

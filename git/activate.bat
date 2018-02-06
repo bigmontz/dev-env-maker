@@ -23,3 +23,7 @@ ECHO Aliases configured
 ECHO Configuring autocrlf FALSE
 CALL git config --global core.autocrlf false
 ECHO autocrlf configured
+
+ECHO Configuring parameters
+CALL git config --global redmine.validatecommitmsg true
+ECHO parameters configured
