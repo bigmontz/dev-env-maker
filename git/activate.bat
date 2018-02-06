@@ -13,8 +13,9 @@ CALL git config --global alias.st "status -s"
 CALL git config --global alias.unstage "reset HEAD --"
 CALL git config --global alias.last "log -1 HEAD"
 CALL git config --global alias.sync "^!(clear && git pull && git push && git st)"
-CALL git config --global alias.ticket "^!git config --local --unset redmine.ticket || git config --local redmine.ticket $1"
+CALL git config --global alias.ticket "^!(git unsetticket || true) && git config --local redmine.ticket $1"
 CALL git config --global alias.getticket "config --local redmine.ticket"
+CALL git config --global alias.unsetticket "config --local --unset redmine.ticket"
 ECHO Aliases configured
 
 ECHO Configuring autocrlf FALSE
