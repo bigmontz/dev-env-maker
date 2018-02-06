@@ -9,6 +9,9 @@ fi
 # Redirect output to stderr.
 exec 1>&2
 
+RED='\033[0;31m'
+NC='\033[0m' # No Color
+
 keywords=(System.out.print @deleteme console.log)
 keywords_for_grep=$(printf "|%s" "${keywords[@]}")
 keywords_for_grep=${keywords_for_grep:1}
@@ -18,7 +21,7 @@ number_of_results=$?
 
 if [ $number_of_results -eq 0 ]
 then
-  echo "# Check following lines:"
+  echo -e "${RED}# Check following lines:${NC}"
   for FILE in ${files_changed[*]} ; do
     for keyword in ${keywords[*]} ; do
       `git grep -q $keyword $FILE`
@@ -26,7 +29,7 @@ then
       if [ $result_for_file -eq 0 ]
       then
         LINE=`git grep -n $keyword $FILE | awk -F ":" '{print $2}'`
-        echo "$FILE contains $keyword at line $LINE."
+        echo -e "${RED}$FILE contains $keyword at line $LINE.${NC}"
       fi
     done
   done
