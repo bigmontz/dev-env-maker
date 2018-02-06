@@ -1,6 +1,7 @@
 #!/bin/sh
 
 TICKET=$(git config --local redmine.ticket)
-if [ ! -z "$TICKET" ] then
+if [ ! -z "$TICKET" ]; 
+then
     echo $(cat "$1") "#$TICKET" > "$1"
 fi
