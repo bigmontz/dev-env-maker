@@ -4,6 +4,7 @@ ECHO Configuring hooks path to %~dp0hooks
 CALL git config --global core.hooksPath %~dp0hooks
 ECHO Hooks configured
 
+
 ECHO Configuring aliases
 CALL git config --global --remove-section alias
 CALL git config --global alias.co "checkout"
