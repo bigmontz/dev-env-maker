@@ -30,10 +30,12 @@ then
       fi
     done
   done
-  echo "Do yout want to proceed anyway? (y/N)"
-  read proceed
-  if [ $proceed -eq 'y']
+  exec < /dev/tty
+  read -p "Do you want to proceed anyway? (y/N)" answer
+  if [[ $answer =~ ^[Yy]$ ]] ;
   then
+    echo "Commit anyway"
+  else
     exit 1
   fi
 fi
