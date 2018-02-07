@@ -35,7 +35,7 @@ then
                     fi
                 fi
                 exec < /dev/tty
-                echo -e "Set a ticket number (empty to close): \n"
+                echo -e "\nSet a ticket number (empty to close): \n"
                 read answer
                 if [ ! -z "$answer" ]; then 
                     git ticket "$answer"
