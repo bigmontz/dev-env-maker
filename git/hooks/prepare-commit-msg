@@ -3,20 +3,47 @@
 RED='\033[0;31m'
 NC='\033[0m' # No Color
 
-TICKET=$(git config --local redmine.ticket)
-if [ ! -z "$TICKET" ]; 
-then
-    echo $(cat "$1") "#$TICKET" > "$1"
-fi
 VALIDATE_COMMIT_MSG=$(git config redmine.validatecommitmsg)
-if [ VALIDATE_COMMIT_MSG ]; 
+if [ "$VALIDATE_COMMIT_MSG" = "true" ]; 
 then
     COMMIT_MSG_HAS_TICKET=$(cat "$1")
     if  grep --quiet  -P " (#\d+[\ \.\,]|#\d+$)" "$1"  ; 
     then 
         echo ""
     else 
-        echo -e "${RED}Commit message has to have a ticket number${NC}"
-        exit 1
+        while true; do
+            TICKET=$(git getticket)
+            TICKET_COUNT=$(git config --local redmine.ticketcount)
+            NUMBER='^[0-9]+$'
+            if [ ! -z "$TICKET" ] && [[ $TICKET =~ $NUMBER ]] && [ "$TICKET_COUNT" -lt 3 ]; 
+            then
+                TICKET_COUNT=$((TICKET_COUNT + 1))
+                git config --local redmine.ticketcount "$TICKET_COUNT"
+                echo $(cat "$1") "#$TICKET" > "$1"
+                break;
+            else 
+                if [ -z "$TICKET" ]; then
+                    echo -e "${RED}Commit message has to have a ticket number${NC}"
+                else 
+                    if  [[ ! $TICKET =~ $NUMBER ]]; then
+                        echo -e "${RED}'$TICKET' is not a valid ticket number${NC}"
+                    else 
+                        if [ ! "$TICKET_COUNT" -lt 3 ]; then
+                            echo -e "${RED}'$TICKET' is was used more then three times as a ticket number${NC}"
+                            
+                        fi
+                    fi
+                fi
+                exec < /dev/tty
+                echo -e "Set a ticket number (empty to close): "
+                read answer
+                if [ ! -z "$answer" ]; then 
+                    git ticket "$answer"
+                    continue
+                fi
+                echo -e "${RED}Commit message has to have a ticket number${NC}"
+                exit 1 
+            fi
+        done
     fi
 fi
