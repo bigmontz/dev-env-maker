@@ -20,6 +20,14 @@ then
                 TICKET_COUNT=$((TICKET_COUNT + 1))
                 git config --local redmine.ticketcount "$TICKET_COUNT"
                 echo $(cat "$1") "#$TICKET" > "$1"
+                exec < /dev/tty
+                echo -e "\nHow many hours have you spent in this issue? \n\n"
+                read HOURS
+                if [ ! -z "$HOURS" ] && [ $(awk 'BEGIN {print ("'$HOURS'" < "'8.1'")}') ];
+                then
+                    sh add_time_entry.sh $TICKET $HOURS
+                    echo -e "\n\n"
+                fi
                 break;
             else 
                 if [ -z "$TICKET" ]; then
