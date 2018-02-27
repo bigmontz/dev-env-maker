@@ -16,5 +16,6 @@ if [ -z "$REDMINE_APIKEY" ]; then
 fi
 
 URL="$REDMINE_URL/time_entries.xml"
-PAYLOAD="<time_entry><issue_id>$ISSUE_ID</issue_id><hours>$HOURS</hours><comments>$COMMENT</comments></time_entry>"
+SPENT_ON=`date +%Y-%m-%d`
+PAYLOAD="<time_entry><issue_id>$ISSUE_ID</issue_id><spent_on>$SPENT_ON</spent_on><hours>$HOURS</hours><comments>$COMMENT</comments></time_entry>"
 curl -H "Content-Type: application/xml" -X POST -d "$PAYLOAD" -H "X-Redmine-API-Key: $REDMINE_APIKEY" $URL
