@@ -18,6 +18,7 @@ CALL git config --global alias.sync "^!(clear && git pull && git push && git st)
 CALL git config --global alias.ticket "^!(git unsetticket || true) && git config --local redmine.ticketcount 0 && git config --local redmine.ticket $1"
 CALL git config --global alias.getticket "config --local redmine.ticket"
 CALL git config --global alias.unsetticket "^!(git config --local --unset redmine.ticket && git config --local --unset redmine.ticketcount)"
+CALL git config --global alias.conflicted "diff --name-only --diff-filter=U"
 ECHO Aliases configured
 
 ECHO Configuring autocrlf FALSE
